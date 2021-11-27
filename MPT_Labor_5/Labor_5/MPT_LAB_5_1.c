@@ -89,7 +89,6 @@ void A_5_1_1(void)
 	TCNT0 = 0;
 	
 	while(1){
-
 	}
 }
 
@@ -148,8 +147,8 @@ void A_5_1_3(void)
 		if(BIT_IS_SET(TASTER_PIN, TASTER_UP) || BIT_IS_SET(TASTER_PIN, TASTER_DOWN)){
 			OCR0 += (-1) + 2 * (TASTER_PIN >> 7);
 			
-			double Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
-			double Frequenz = ((uint32_t)1000000)/Periode;
+			Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
+			Frequenz = ((uint32_t)1000000)/Periode;
 			sprintf(string, "%lf", Frequenz);
 			UsartPuts(string);
 		}

@@ -63,8 +63,8 @@
 //------------------------------------------------------------------------------
 //  Private Variablen
 //------------------------------------------------------------------------------
-	
-	
+
+
 //------------------------------------------------------------------------------
 //  Interrupt Service Routinen
 //------------------------------------------------------------------------------
@@ -90,7 +90,24 @@
 // A_5_2_1: Motorsteuerung mit fester Drehzahl und Terminalausgabe.
 void A_5_2_1(void)
 {
-  // IHR_CODE_HIER ...
+	// IHR_CODE_HIER ...
+	LED_DDR = 0xff;
+	LED_PORT = 0x01;
+	
+	MOTOR_PWM_DDR = 0x0b;
+	MOTOR_DIR_PORT = 0x02;
+	
+	UsartInit(8, 1, 0, 9600);
+	
+	TCCR0 = 0b00110100;
+	OCR0 = 0x30;
+	TCNT0 = 0;
+	
+	UsartPuts("Drehzahstufe 0x30");
+	
+	while(1){
+		
+	}
 }
 
 //##############################################################################
@@ -98,7 +115,41 @@ void A_5_2_1(void)
 // A_5_2_2: Motorsteuerung mit einstellbarer Drehzahl und Terminalausgabe.
 void A_5_2_2(void)
 {
-  // IHR_CODE_HIER ...
+	// IHR_CODE_HIER ...
+	char string[20]
+	
+	LED_DDR = 0xff;
+	LED_PORT = 0x01;
+	
+	MOTOR_PWM_DDR = 0x0b;
+	MOTOR_DIR_PORT = 0x02;
+	
+	UsartInit(8, 1, 0, 9600);
+	
+	TCCR0 = 0b00110100;
+	OCR0 = 0x30;
+	TCNT0 = 0;
+	
+	double Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
+	double Frequenz = ((uint32_t)1000000)/Periode;
+	sprintf(string, "'%lf\n'", Frequenz);
+	UsartPuts(string);
+	
+	while(1){
+		if(BIT_IS_SET(TASTER_PIN, TASTER_UP) || BIT_IS_SET(TASTER_PIN, TASTER_DOWN)){
+			if(TASTER_PIN >> 7 && OCR0 < 255){
+				OCR0++;
+			}
+			else if(OCR0 > 0){
+				OCR0--;
+			}
+			
+			Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
+			Frequenz = ((uint32_t)1000000)/Periode;
+			sprintf(string, "'%lf\n'", Frequenz);
+			UsartPuts(string);
+		}
+	}
 }
 
 //##############################################################################
@@ -107,6 +158,49 @@ void A_5_2_2(void)
 void A_5_2_3(void)
 {
 	// IHR_CODE_HIER ...
+	// IHR_CODE_HIER ...
+	char string[20]
+	
+	LED_DDR = 0xff;
+	LED_PORT = 0x01;
+	
+	MOTOR_PWM_DDR = 0x0b;
+	MOTOR_DIR_PORT = 0x02;
+	
+	UsartInit(8, 1, 0, 9600);
+	
+	TCCR0 = 0b00110100;
+	OCR0 = 0x30;
+	TCNT0 = 0;
+	
+	double Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
+	double Frequenz = ((uint32_t)1000000)/Periode;
+	sprintf(string, "'%lf\n'", Frequenz);
+	UsartPuts(string);
+	
+	while(1){
+		if(BIT_IS_SET(TASTER_PIN, TASTER_UP) || BIT_IS_SET(TASTER_PIN, TASTER_DOWN)){
+			if(TASTER_PIN >> 7 && OCR0 < 255){
+				OCR0++;
+			}
+			else if(OCR0 > 0){
+				OCR0--;
+			}
+			
+			Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
+			Frequenz = ((uint32_t)1000000)/Periode;
+			sprintf(string, "'%lf\n'", Frequenz);
+			UsartPuts(string);
+		}
+		if(BIT_IS_SET(TASTER_PIN, TASTER_STOP)){
+			OCR0 = 0;
+			
+			Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
+			Frequenz = ((uint32_t)1000000)/Periode;
+			sprintf(string, "'%lf\n'", Frequenz);
+			UsartPuts(string);
+		}
+	}
 }
 
 //##############################################################################
@@ -116,5 +210,5 @@ void A_5_2_3(void)
 
 
 /*
- *  EoF
- */
+*  EoF
+*/
