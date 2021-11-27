@@ -51,8 +51,8 @@
 //------------------------------------------------------------------------------
 //  Private Variablen
 //------------------------------------------------------------------------------
-	
-	
+
+
 //------------------------------------------------------------------------------
 //  Interrupt Service Routinen
 //------------------------------------------------------------------------------
@@ -78,24 +78,83 @@
 // A_5_1_1: Timer0 als Frequenzgenerator mit fester Frequenz.
 void A_5_1_1(void)
 {
-  // IHR_CODE_HIER ...
-}	
+	// IHR_CODE_HIER ...
+	LED_DDR = 0xff;
+	LED_PORT = 0x01;
+	
+	FG_DDR = 0x08;
+	
+	OCR0 = 0x80;
+	TCCR0 = 0b01001101;
+	TCNT0 = 0;
+	
+	while(1){
+
+	}
+}
 
 //##############################################################################
 
 // A_5_1_2: Timer0 als Frequenzgenerator mit fester Frequenz und Terminalausgabe.
 void A_5_1_2(void)
 {
-  // IHR_CODE_HIER ...
-}	
+	// IHR_CODE_HIER ...
+	LED_DDR = 0xff;
+	LED_PORT = 0x01;
+	
+	FG_DDR = 0x08;
+	
+	UsartInit(8, 1, 0, 9600);
+	
+	OCR0 = 0x80;
+	TCCR0 = 0b01001101;
+	TCNT0 = 0;
+	
+	double Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
+	double Frequenz = ((uint32_t)1000000)/Periode;
+	char* string[20];
+	sprintf(string, "%lf", Frequenz);
+	UsartPuts(string);
+	
+	while(1){
+
+	}
+}
 
 //##############################################################################
 
 // A_5_1_3: Timer0 als Frequenzgenerator mit einstellbarer Frequenz und Terminalausgabe.
 void A_5_1_3(void)
 {
-  // IHR_CODE_HIER ...
-}	
+	// IHR_CODE_HIER ...
+	LED_DDR = 0xff;
+	LED_PORT = 0x01;
+	
+	FG_DDR = 0x08;
+	
+	UsartInit(8, 1, 0, 9600);
+	
+	OCR0 = 0x80;
+	TCCR0 = 0b01001101;
+	TCNT0 = 0;
+	
+	char* string[20];
+	double Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
+	double Frequenz = ((uint32_t)1000000)/Periode;
+	sprintf(string, "%lf", Frequenz);
+	UsartPuts(string);
+	
+	while(1){
+		if(BIT_IS_SET(TASTER_PIN, TASTER_UP) || BIT_IS_SET(TASTER_PIN, TASTER_DOWN)){
+			OCR0 += (-1) + 2 * (TASTER_PIN >> 7);
+			
+			double Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
+			double Frequenz = ((uint32_t)1000000)/Periode;
+			sprintf(string, "%lf", Frequenz);
+			UsartPuts(string);
+		}
+	}
+}
 
 //##############################################################################
 
@@ -104,5 +163,5 @@ void A_5_1_3(void)
 
 
 /*
- *  EoF
- */
+*  EoF
+*/
