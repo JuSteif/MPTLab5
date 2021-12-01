@@ -80,7 +80,7 @@ void A_5_1_1(void)
 {
 	// IHR_CODE_HIER ...
 	LED_DDR = 0xff;
-	LED_PORT = 0x01;
+	LED_PORT = ~0x01;
 	
 	FG_DDR = 0x08;
 	
@@ -99,7 +99,7 @@ void A_5_1_2(void)
 {
 	// IHR_CODE_HIER ...
 	LED_DDR = 0xff;
-	LED_PORT = 0x01;
+	LED_PORT = ~0x01;
 	
 	FG_DDR = 0x08;
 	
@@ -127,7 +127,7 @@ void A_5_1_3(void)
 {
 	// IHR_CODE_HIER ...
 	LED_DDR = 0xff;
-	LED_PORT = 0x01;
+	LED_PORT = ~0x01;
 	
 	FG_DDR = 0x08;
 	

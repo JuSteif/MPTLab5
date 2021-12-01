@@ -92,7 +92,8 @@ void A_5_2_1(void)
 {
 	// IHR_CODE_HIER ...
 	LED_DDR = 0xff;
-	LED_PORT = 0x01;
+	LED_PORT = ~0x01;
+	
 	
 	MOTOR_PWM_DDR = 0x0b;
 	MOTOR_DIR_PORT = 0x02;
@@ -137,7 +138,7 @@ void A_5_2_2(void)
 	
 	while(1){
 		if(BIT_IS_SET(TASTER_PIN, TASTER_UP) || BIT_IS_SET(TASTER_PIN, TASTER_DOWN)){
-			if(TASTER_PIN >> 7 && OCR0 < 255){
+			if(BIT_IS_SET(TASTER_PIN, TASTER_UP) && OCR0 < 255){
 				OCR0++;
 			}
 			else if(OCR0 > 0){
@@ -157,7 +158,6 @@ void A_5_2_2(void)
 // A_5_2_3: Motorsteuerung mit einstellbarer Drehzahl, Stopfunktion und Terminalausgabe.
 void A_5_2_3(void)
 {
-	// IHR_CODE_HIER ...
 	// IHR_CODE_HIER ...
 	char string[20]
 	
@@ -180,7 +180,7 @@ void A_5_2_3(void)
 	
 	while(1){
 		if(BIT_IS_SET(TASTER_PIN, TASTER_UP) || BIT_IS_SET(TASTER_PIN, TASTER_DOWN)){
-			if(TASTER_PIN >> 7 && OCR0 < 255){
+			if(BIT_IS_SET(TASTER_PIN, TASTER_UP) && OCR0 < 255){
 				OCR0++;
 			}
 			else if(OCR0 > 0){
