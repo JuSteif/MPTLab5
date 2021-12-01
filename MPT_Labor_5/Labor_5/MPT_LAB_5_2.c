@@ -91,20 +91,24 @@
 void A_5_2_1(void)
 {
 	// IHR_CODE_HIER ...
+	//LED inititalisieren
 	LED_DDR = 0xff;
 	LED_PORT = ~0x01;
 	
-	
+	//Richtungsregister initialisieren: Port 3 in PINB Ausgang des Wavefrontgenerators Pin 0 & 1 für Richtungssteuerung des Motors
 	MOTOR_PWM_DDR = 0x0b;
 	MOTOR_DIR_PORT = 0x02;
 	
+	//usart initalisieren
 	UsartInit(8, 1, 0, 9600);
 	
+	//Timer0 auf phasenkorektes nicht invertierendes PWM-Signal initalisieren
 	TCCR0 = 0b00110100;
 	OCR0 = 0x30;
 	TCNT0 = 0;
 	
-	UsartPuts("Drehzahstufe 0x30");
+	//Ausgabe der Drehzahlstufe
+	UsartPuts("Drehzahlstufe 0x30");
 	
 	while(1){
 		
@@ -117,27 +121,38 @@ void A_5_2_1(void)
 void A_5_2_2(void)
 {
 	// IHR_CODE_HIER ...
+	//String für Terminal Ausgabe
 	char string[20]
 	
+	//LED inititalisieren
 	LED_DDR = 0xff;
 	LED_PORT = 0x01;
 	
+	//Richtungsregister initialisieren: Port 3 in PINB Ausgang des Wavefrontgenerators Pin 0 & 1 für Richtungssteuerung des Motors
 	MOTOR_PWM_DDR = 0x0b;
 	MOTOR_DIR_PORT = 0x02;
 	
+	//usart initalisieren
 	UsartInit(8, 1, 0, 9600);
 	
+	//Timer0 auf phasenkorektes nicht invertierendes PWM-Signal initalisieren
 	TCCR0 = 0b00110100;
 	OCR0 = 0x30;
 	TCNT0 = 0;
 	
+	//Berechnung der Frequenz und Ausgabe auf dem Terminal
 	double Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
 	double Frequenz = ((uint32_t)1000000)/Periode;
 	sprintf(string, "'%lf\n'", Frequenz);
 	UsartPuts(string);
 	
+	//Ausgabe der Drehzahlstufe
+	UsartPuts("Drehzahlstufe 0x30");
+	
 	while(1){
+		//Abfrage ob Taster gedrückt wurde
 		if(BIT_IS_SET(TASTER_PIN, TASTER_UP) || BIT_IS_SET(TASTER_PIN, TASTER_DOWN)){
+			//Abfangen von Overflows und bestimmen des Verhaltens von OCR0
 			if(BIT_IS_SET(TASTER_PIN, TASTER_UP) && OCR0 < 255){
 				OCR0++;
 			}
@@ -145,12 +160,18 @@ void A_5_2_2(void)
 				OCR0--;
 			}
 			
+			//ausgabe der neuen Frequenz an Terminal
 			Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
 			Frequenz = ((uint32_t)1000000)/Periode;
 			sprintf(string, "'%lf\n'", Frequenz);
 			UsartPuts(string);
 			
+			//Delay gegen Prellen
 			Wait_x_ms(50);
+			
+			//Ausgabe der Drehzahlstufe
+			sprintf(string, "Drehzahlstufe 0x%x", OCR0);
+			UsartPuts(string);
 		}
 	}
 }
@@ -161,27 +182,38 @@ void A_5_2_2(void)
 void A_5_2_3(void)
 {
 	// IHR_CODE_HIER ...
+	//String für Terminal Ausgabe
 	char string[20]
 	
+	//LED inititalisieren
 	LED_DDR = 0xff;
 	LED_PORT = 0x01;
 	
+	//Richtungsregister initialisieren: Port 3 in PINB Ausgang des Wavefrontgenerators Pin 0 & 1 für Richtungssteuerung des Motors
 	MOTOR_PWM_DDR = 0x0b;
 	MOTOR_DIR_PORT = 0x02;
 	
+	//usart initalisieren
 	UsartInit(8, 1, 0, 9600);
 	
+	//Timer0 auf phasenkorektes nicht invertierendes PWM-Signal initalisieren
 	TCCR0 = 0b00110100;
 	OCR0 = 0x30;
 	TCNT0 = 0;
 	
+	//Berechnung der Frequenz und Ausgabe auf dem Terminal
 	double Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
 	double Frequenz = ((uint32_t)1000000)/Periode;
 	sprintf(string, "'%lf\n'", Frequenz);
 	UsartPuts(string);
 	
+	//Ausgabe der Drehzahlstufe
+	UsartPuts("Drehzahlstufe 0x30");
+	
 	while(1){
+		//Abfrage ob Taster gedrückt wurde
 		if(BIT_IS_SET(TASTER_PIN, TASTER_UP) || BIT_IS_SET(TASTER_PIN, TASTER_DOWN)){
+			//Abfangen von Overflows und bestimmen des Verhaltens von OCR0
 			if(BIT_IS_SET(TASTER_PIN, TASTER_UP) && OCR0 < 255){
 				OCR0++;
 			}
@@ -189,22 +221,39 @@ void A_5_2_3(void)
 				OCR0--;
 			}
 			
+			//ausgabe der neuen Frequenz an Terminal
 			Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
 			Frequenz = ((uint32_t)1000000)/Periode;
 			sprintf(string, "'%lf\n'", Frequenz);
 			UsartPuts(string);
 			
+			//Ausgabe der Drehzahlstufe
+			sprintf(string, "Drehzahlstufe 0x%x", OCR0);
+			UsartPuts(string);
+			
+			//Delay gegen Prellen
 			Wait_x_ms(50);
 		}
+		//Abfrage ob Taster-Stopp gedrückt wurde
 		if(BIT_IS_SET(TASTER_PIN, TASTER_STOP)){
 			OCR0 = 0;
+			//MOTOR_DIR_PORT |= 3;
 			
+			//ausgabe der neuen Frequenz an Terminal
 			Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
 			Frequenz = ((uint32_t)1000000)/Periode;
 			sprintf(string, "'%lf\n'", Frequenz);
 			UsartPuts(string);
 			
+			//Ausgabe der Drehzahlstufe
+			sprintf(string, "Drehzahlstufe 0x%x", OCR0);
+			UsartPuts(string);
+			
+			//Delay gegen Prellen
 			Wait_x_ms(50);
+			
+			//Motor nach bremsen wieder freischalten
+			BIT_IS_CLR(MOTOR_DIR_PORT, 0);
 		}
 	}
 }

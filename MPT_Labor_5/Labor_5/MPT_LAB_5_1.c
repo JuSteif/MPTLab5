@@ -79,15 +79,19 @@
 void A_5_1_1(void)
 {
 	// IHR_CODE_HIER ...
+	//LED inititalisieren
 	LED_DDR = 0xff;
 	LED_PORT = ~0x01;
 	
+	//Richtungsregister initialisieren: Port 3 in PINB Ausgang des Wavefrontgenerators
 	FG_DDR = 0x08;
 	
+	//Timer0 auf CTC initalisieren
 	OCR0 = 0x80;
 	TCCR0 = 0b01001101;
 	TCNT0 = 0;
 	
+	//Nix tun
 	while(1){
 	}
 }
@@ -98,17 +102,22 @@ void A_5_1_1(void)
 void A_5_1_2(void)
 {
 	// IHR_CODE_HIER ...
+	//LED inititalisieren
 	LED_DDR = 0xff;
 	LED_PORT = ~0x01;
 	
+	//Richtungsregister initialisieren: Port 3 in PINB Ausgang des Wavefrontgenerators
 	FG_DDR = 0x08;
 	
+	//usart initalisieren
 	UsartInit(8, 1, 0, 9600);
 	
+	//Timer0 auf CTC initalisieren
 	OCR0 = 0x80;
 	TCCR0 = 0b01001101;
 	TCNT0 = 0;
 	
+	//Berechnung der Frequenz
 	double Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
 	double Frequenz = ((uint32_t)1000000)/Periode;
 	char* string[20];
@@ -126,17 +135,22 @@ void A_5_1_2(void)
 void A_5_1_3(void)
 {
 	// IHR_CODE_HIER ...
+	//LED inititalisieren
 	LED_DDR = 0xff;
 	LED_PORT = ~0x01;
 	
+	//Richtungsregister initialisieren: Port 3 in PINB Ausgang des Wavefrontgenerators
 	FG_DDR = 0x08;
 	
+	//usart initalisieren
 	UsartInit(8, 1, 0, 9600);
 	
+	//Timer0 auf CTC initalisieren
 	OCR0 = 0x80;
 	TCCR0 = 0b01001101;
 	TCNT0 = 0;
 	
+	//Berechnung der Frequenz
 	char* string[20];
 	double Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
 	double Frequenz = ((uint32_t)1000000)/Periode;
@@ -144,14 +158,23 @@ void A_5_1_3(void)
 	UsartPuts(string);
 	
 	while(1){
+		//Abfrage ob Taster gedrückt wurde
 		if(BIT_IS_SET(TASTER_PIN, TASTER_UP) || BIT_IS_SET(TASTER_PIN, TASTER_DOWN)){
-			OCR0 += (-1) + 2 * (TASTER_PIN >> 7);
+			//Abfangen von Overflows und bestimmen des Verhaltens von OCR0
+			if(BIT_IS_SET(TASTER_PIN, TASTER_UP) && OCR0 < 255){
+				OCR0++;
+			}
+			else if(OCR0 > 0){
+				OCR0--;
+			}
 			
+			//ausgabe der neuen Frequenz an Terminal
 			Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
 			Frequenz = ((uint32_t)1000000)/Periode;
 			sprintf(string, "%lf", Frequenz);
 			UsartPuts(string);
 			
+			//Delay gegen Prellen
 			Wait_x_ms(50);
 		}
 	}
