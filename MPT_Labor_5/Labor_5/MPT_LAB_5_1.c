@@ -151,6 +151,8 @@ void A_5_1_3(void)
 			Frequenz = ((uint32_t)1000000)/Periode;
 			sprintf(string, "%lf", Frequenz);
 			UsartPuts(string);
+			
+			Wait_x_ms(50);
 		}
 	}
 }

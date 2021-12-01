@@ -149,6 +149,8 @@ void A_5_2_2(void)
 			Frequenz = ((uint32_t)1000000)/Periode;
 			sprintf(string, "'%lf\n'", Frequenz);
 			UsartPuts(string);
+			
+			Wait_x_ms(50);
 		}
 	}
 }
@@ -191,6 +193,8 @@ void A_5_2_3(void)
 			Frequenz = ((uint32_t)1000000)/Periode;
 			sprintf(string, "'%lf\n'", Frequenz);
 			UsartPuts(string);
+			
+			Wait_x_ms(50);
 		}
 		if(BIT_IS_SET(TASTER_PIN, TASTER_STOP)){
 			OCR0 = 0;
@@ -199,6 +203,8 @@ void A_5_2_3(void)
 			Frequenz = ((uint32_t)1000000)/Periode;
 			sprintf(string, "'%lf\n'", Frequenz);
 			UsartPuts(string);
+			
+			Wait_x_ms(50);
 		}
 	}
 }
