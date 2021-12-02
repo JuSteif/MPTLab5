@@ -88,7 +88,7 @@ void A_5_1_1(void)
 	
 	//Timer0 auf CTC initalisieren
 	OCR0 = 0x80;
-	TCCR0 = 0b01001101;
+	TCCR0 = 0b00011101;
 	TCNT0 = 0;
 	
 	//Nix tun
@@ -114,7 +114,7 @@ void A_5_1_2(void)
 	
 	//Timer0 auf CTC initalisieren
 	OCR0 = 0x80;
-	TCCR0 = 0b01001101;
+	TCCR0 = 0b00011101;
 	TCNT0 = 0;
 	
 	//Berechnung der Frequenz
@@ -147,7 +147,7 @@ void A_5_1_3(void)
 	
 	//Timer0 auf CTC initalisieren
 	OCR0 = 0x80;
-	TCCR0 = 0b01001101;
+	TCCR0 = 0b00011101;
 	TCNT0 = 0;
 	
 	//Berechnung der Frequenz

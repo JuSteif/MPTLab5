@@ -27,7 +27,7 @@ int main(void)
   // A_5_1_2: Timer0 als Frequenzgenerator mit fester Frequenz und Terminalausgabe.
   // A_5_1_3: Timer0 als Frequenzgenerator mit einstellbarer Frequenz und Terminalausgabe.
   //------------------------------------------------------------------------------
-  A_5_1_1();
+  //A_5_1_1();
   //A_5_1_2();
   //A_5_1_3();
 
@@ -40,7 +40,7 @@ int main(void)
   //------------------------------------------------------------------------------
   //A_5_2_1();
   //A_5_2_2();
-  //A_5_2_3();
+  A_5_2_3();
 	
 	
   while(1)

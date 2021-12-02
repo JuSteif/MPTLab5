@@ -22,6 +22,7 @@
 //------------------------------------------------------------------------------
 // Allgemeine Headerdateien
 #include <stdio.h>
+#include <stdlib.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -36,7 +37,7 @@
 //------------------------------------------------------------------------------
 //  Makro-/Konstantendefinitionen
 //------------------------------------------------------------------------------
-#define LED_DDR     DDRC
+#define LED_DDR		DDRC
 #define LED_PORT    PORTC
 #define FG_DDR      DDRB
 #define FG_PORT     PORTB
@@ -103,9 +104,9 @@ void A_5_2_1(void)
 	UsartInit(8, 1, 0, 9600);
 	
 	//Timer0 auf phasenkorektes nicht invertierendes PWM-Signal initalisieren
-	TCCR0 = 0b00110100;
-	OCR0 = 0x30;
+	TCCR0 = 0b01100100;
 	TCNT0 = 0;
+	OCR0 = 0x80;
 	
 	//Ausgabe der Drehzahlstufe
 	UsartPuts("Drehzahlstufe 0x30");
@@ -121,29 +122,33 @@ void A_5_2_1(void)
 void A_5_2_2(void)
 {
 	// IHR_CODE_HIER ...
-	//String für Terminal Ausgabe
-	char string[20]
 	
 	//LED inititalisieren
 	LED_DDR = 0xff;
-	LED_PORT = 0x01;
+	LED_PORT = ~0x01;
 	
 	//Richtungsregister initialisieren: Port 3 in PINB Ausgang des Wavefrontgenerators Pin 0 & 1 für Richtungssteuerung des Motors
 	MOTOR_PWM_DDR = 0x0b;
 	MOTOR_DIR_PORT = 0x02;
 	
+	//String für Terminal Ausgabe
+	//char* string = malloc(200);
+	char string[100];
+	
 	//usart initalisieren
 	UsartInit(8, 1, 0, 9600);
 	
 	//Timer0 auf phasenkorektes nicht invertierendes PWM-Signal initalisieren
-	TCCR0 = 0b00110100;
-	OCR0 = 0x30;
+	TCCR0 = 0b01100100;
+	OCR0 = 0x80;
 	TCNT0 = 0;
 	
+	//UsartPuts("Hallo");
+	
 	//Berechnung der Frequenz und Ausgabe auf dem Terminal
-	double Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
-	double Frequenz = ((uint32_t)1000000)/Periode;
-	sprintf(string, "'%lf\n'", Frequenz);
+	int Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
+	int Frequenz = ((uint32_t)1000000)/Periode;
+	sprintf(string, "'%d\n'", Frequenz);
 	UsartPuts(string);
 	
 	//Ausgabe der Drehzahlstufe
@@ -163,15 +168,15 @@ void A_5_2_2(void)
 			//ausgabe der neuen Frequenz an Terminal
 			Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
 			Frequenz = ((uint32_t)1000000)/Periode;
-			sprintf(string, "'%lf\n'", Frequenz);
+			sprintf(string, "'%d\n'", Frequenz);
 			UsartPuts(string);
-			
-			//Delay gegen Prellen
-			Wait_x_ms(50);
 			
 			//Ausgabe der Drehzahlstufe
 			sprintf(string, "Drehzahlstufe 0x%x", OCR0);
 			UsartPuts(string);
+			
+			//Delay gegen Prellen
+			Wait_x_ms(50);
 		}
 	}
 }
@@ -182,29 +187,33 @@ void A_5_2_2(void)
 void A_5_2_3(void)
 {
 	// IHR_CODE_HIER ...
-	//String für Terminal Ausgabe
-	char string[20]
 	
 	//LED inititalisieren
 	LED_DDR = 0xff;
-	LED_PORT = 0x01;
+	LED_PORT = ~0x01;
 	
 	//Richtungsregister initialisieren: Port 3 in PINB Ausgang des Wavefrontgenerators Pin 0 & 1 für Richtungssteuerung des Motors
 	MOTOR_PWM_DDR = 0x0b;
 	MOTOR_DIR_PORT = 0x02;
 	
+	//String für Terminal Ausgabe
+	//char* string = malloc(200);
+	char string[100];
+	
 	//usart initalisieren
 	UsartInit(8, 1, 0, 9600);
 	
 	//Timer0 auf phasenkorektes nicht invertierendes PWM-Signal initalisieren
-	TCCR0 = 0b00110100;
+	TCCR0 = 0b01100100;
 	OCR0 = 0x30;
 	TCNT0 = 0;
 	
+	//UsartPuts("Hallo");
+	
 	//Berechnung der Frequenz und Ausgabe auf dem Terminal
-	double Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
-	double Frequenz = ((uint32_t)1000000)/Periode;
-	sprintf(string, "'%lf\n'", Frequenz);
+	int Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
+	int Frequenz = ((uint32_t)1000000)/Periode;
+	sprintf(string, "'%d\n'", Frequenz);
 	UsartPuts(string);
 	
 	//Ausgabe der Drehzahlstufe
@@ -224,7 +233,7 @@ void A_5_2_3(void)
 			//ausgabe der neuen Frequenz an Terminal
 			Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
 			Frequenz = ((uint32_t)1000000)/Periode;
-			sprintf(string, "'%lf\n'", Frequenz);
+			sprintf(string, "'%d\n'", Frequenz);
 			UsartPuts(string);
 			
 			//Ausgabe der Drehzahlstufe
@@ -237,12 +246,12 @@ void A_5_2_3(void)
 		//Abfrage ob Taster-Stopp gedrückt wurde
 		if(BIT_IS_SET(TASTER_PIN, TASTER_STOP)){
 			OCR0 = 0;
-			//MOTOR_DIR_PORT |= 3;
+			MOTOR_DIR_PORT |= 3;
 			
 			//ausgabe der neuen Frequenz an Terminal
 			Periode = ((uint32_t)(2*1024) * (uint32_t)(OCR0+1))/((uint32_t)F_CPU/(uint32_t)1000000);
 			Frequenz = ((uint32_t)1000000)/Periode;
-			sprintf(string, "'%lf\n'", Frequenz);
+			sprintf(string, "'%d\n'", Frequenz);
 			UsartPuts(string);
 			
 			//Ausgabe der Drehzahlstufe
@@ -253,7 +262,7 @@ void A_5_2_3(void)
 			Wait_x_ms(50);
 			
 			//Motor nach bremsen wieder freischalten
-			BIT_IS_CLR(MOTOR_DIR_PORT, 0);
+			CLR_BIT(MOTOR_DIR_PORT, 0);
 		}
 	}
 }
